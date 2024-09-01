@@ -1,0 +1,6 @@
+Установка boost на Debian:
+sudo apt-get install libboost-all-dev
+
+Скачивание googletest в проекте:
+wget https://github.com/google/googletest/archive/refs/tags/v1.15.2.tar.gz
+tar -zxf v1.15.2.tar.gz
