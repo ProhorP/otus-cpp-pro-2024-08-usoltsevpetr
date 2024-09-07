@@ -32,9 +32,12 @@ IpV4::IpV4(std::string stringParam) : string{stringParam}
 
 bool IpV4::compareGreater(const IpV4 &lhs, const IpV4 &rhs) 
 {
-    for (size_t i = 0; i < 4; i++)
+    for (size_t i = 0; i < 4; i++){
         if (lhs.data[i] > rhs.data[i])
             return true;
+        if (lhs.data[i] < rhs.data[i])
+            return false;
+    }
     return false;
 }
 
