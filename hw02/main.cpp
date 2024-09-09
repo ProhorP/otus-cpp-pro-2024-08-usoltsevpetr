@@ -12,10 +12,10 @@ int main()
     try
     {
         std::vector<IpV4> ip_pool;
-        std::ifstream in_file{"/home/user/otus-cpp-pro-2024-08-usoltsevpetr/hw02/ip_filter.tsv"};
+        // std::ifstream in_file{"/home/user/otus-cpp-pro-2024-08-usoltsevpetr/hw02/ip_filter.tsv"};
 
-        // for (std::string line; std::getline(std::cin, line);)
-        for (std::string line; std::getline(in_file, line);)
+        for (std::string line; std::getline(std::cin, line);)
+        // for (std::string line; std::getline(in_file, line);)
         {
             ip_pool.emplace_back(line.substr(0, line.find_first_of('\t')));
         }
