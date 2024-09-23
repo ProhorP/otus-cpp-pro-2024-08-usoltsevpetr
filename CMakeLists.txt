@@ -10,7 +10,8 @@ option(WITH_GOOGLE_TEST "Whether to build Google test" ON)
 add_subdirectory(googletest-1.15.2)
 
 # add_subdirectory(hw01)
-add_subdirectory(hw02)
+# add_subdirectory(hw02)
+add_subdirectory(hw03)
 
 set(CPACK_GENERATOR DEB)
 set(CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
