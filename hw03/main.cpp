@@ -39,7 +39,7 @@ int main()
 
     //container4
     my_vector<int, cpp_11_allocator<int>> container4;
-    for (int i = 0; i < count; i++)
+    for (int i = 0; i < 20; i++)
         container4.push_back(i);
 
     std::cout << std::endl
