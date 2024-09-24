@@ -10,7 +10,7 @@ template <class T, class Allocator = std::allocator<T>>
 class my_vector
 {
 public:
-    void push_back(T x)
+    void push_back(const T& x)
     {
         if (capacity == 0)
         {
