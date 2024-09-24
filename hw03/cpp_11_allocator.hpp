@@ -17,14 +17,14 @@ struct cpp_11_allocator
 {
     using value_type = T;
 
-    std::shared_ptr<std::list<wrapped_mem>> poolList;
+    std::shared_ptr<std::list<std::shared_ptr<wrapped_mem>>> poolList;
     std::size_t poolSize = 10;
     std::size_t pos;
 
     cpp_11_allocator()
-        : poolList(std::make_shared<std::list<wrapped_mem>>())
+        : poolList(std::make_shared<std::list<std::shared_ptr<wrapped_mem>>>())
     {
-        poolList->emplace_back(wrapped_mem(10));
+        poolList->push_back(std::make_shared<wrapped_mem>(10 * sizeof(T)));
     }
 
     template <class U>
@@ -45,14 +45,15 @@ struct cpp_11_allocator
         if (pos + n > poolSize)
         {
             poolSize = pos + n;
-            poolList->emplace_back(wrapped_mem(poolSize));
+            poolList->push_back(std::make_shared<wrapped_mem>(poolSize * sizeof(T)));
             pos = 0;
         }
 
         int cur = pos;
         pos += n;
-        poolList->back().push();
-        return reinterpret_cast<T *>(poolList->back().get()) + cur;
+        poolList->back()->push();
+        // std::cout << "allocate=" << poolList->back()->get() << std::endl;
+        return reinterpret_cast<T *>(poolList->back()->get()) + cur;
     }
 
     void deallocate(T *p, std::size_t n)
@@ -61,12 +62,20 @@ struct cpp_11_allocator
             return;
         for (auto &i : *poolList)
         {
-            if (p >= i.get() && p < i.getEnd())
+            if (p >= (*i).get() && p < (*i).getEnd())
             {
-                i.pop();
+                (*i).pop();
                 break;
             }
         }
+    }
+
+    void print(){
+        for (auto &i : *poolList)
+        {
+            std::cout << "data=" << (*i).get() << ", size=" << (*i).getSize() << ", cnt=" << (*i).getCnt() << std::endl;
+        }
+        
     }
 
     template <class U>

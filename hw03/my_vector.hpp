@@ -10,7 +10,7 @@ template <class T, class Allocator = std::allocator<T>>
 class my_vector
 {
 public:
-    void push_back(const T& x)
+    void push_back(const T &x)
     {
         if (capacity == 0)
         {
@@ -28,6 +28,14 @@ public:
 
         std::allocator_traits<Allocator>::construct(alloc, data + curSize, x);
         ++curSize;
+    }
+
+    void print()
+    {
+        std::cout << std::endl
+                  << "InnerContainer:" << std::endl;
+        for (std::size_t i = 0; i < curSize; i++)
+            std::cout << "[" << i << "] = " << data[i] << std::endl;
     }
 
     std::size_t size() const
@@ -80,8 +88,8 @@ public:
         return iterator(data + curSize);
     }
 
-    ~my_vector()
-    {
+    ~my_vector() {
+        // alloc.print();
     };
 
 private:
