@@ -6,10 +6,10 @@
 #include <list>
 #include <map>
 
-template <class T, class Allocator  = std::allocator<T>>
+template <class T, class Allocator = std::allocator<T>>
 class my_vector
 {
-    public:
+public:
     void push_back(T x)
     {
         if (capacity == 0)
@@ -21,7 +21,7 @@ class my_vector
         {
             capacity = capacity * 2 + 1;
             T *newData = std::allocator_traits<Allocator>::allocate(alloc, capacity);
-            std::copy(data, data + curSize * sizeof(T), newData); // naive
+            std::copy(data, data + curSize, newData); // naive
             std::swap(newData, data);
             std::allocator_traits<Allocator>::deallocate(alloc, newData, curSize);
         }
@@ -30,7 +30,8 @@ class my_vector
         ++curSize;
     }
 
-    std::size_t size() const {
+    std::size_t size() const
+    {
         return curSize;
     };
 
@@ -78,6 +79,10 @@ class my_vector
     {
         return iterator(data + curSize);
     }
+
+    ~my_vector()
+    {
+    };
 
 private:
     std::size_t curSize = 0;
