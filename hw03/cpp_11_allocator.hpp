@@ -2,6 +2,7 @@
 #include <memory>
 #include <list>
 #include <iostream>
+#include "wrapped_mem.h"
 
 struct deleter
 {
@@ -16,14 +17,14 @@ struct cpp_11_allocator
 {
     using value_type = T;
 
-    std::shared_ptr<std::list<std::shared_ptr<void>>> poolList;
+    std::shared_ptr<std::list<wrapped_mem>> poolList;
     std::size_t poolSize = 10;
     std::size_t pos;
 
     cpp_11_allocator()
-        : poolList(std::make_shared<std::list<std::shared_ptr<void>>>())
+        : poolList(std::make_shared<std::list<wrapped_mem>>())
     {
-        poolList->emplace_back(::operator new(sizeof(T) * 10), deleter());
+        poolList->emplace_back(wrapped_mem(10));
     }
 
     template <class U>
@@ -44,19 +45,28 @@ struct cpp_11_allocator
         if (pos + n > poolSize)
         {
             poolSize = pos + n;
-            poolList->emplace_back(::operator new(sizeof(T) * poolSize), deleter());
+            poolList->emplace_back(wrapped_mem(poolSize));
             pos = 0;
         }
 
         int cur = pos;
         pos += n;
+        poolList->back().push();
         return reinterpret_cast<T *>(poolList->back().get()) + cur;
     }
 
     void deallocate(T *p, std::size_t n)
     {
-        std::cout << "deallocate=" << p << ", size=" << n << std::endl;
-        // implementation
+        if (n == 0)
+            return;
+        for (auto &i : *poolList)
+        {
+            if (p >= i.get() && p < i.getEnd())
+            {
+                i.pop();
+                break;
+            }
+        }
     }
 
     template <class U>
