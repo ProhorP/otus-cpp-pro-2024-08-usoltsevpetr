@@ -55,6 +55,7 @@ struct cpp_11_allocator
 
     void deallocate(T *p, std::size_t n)
     {
+        std::cout << "deallocate=" << p << ", size=" << n << std::endl;
         // implementation
     }
 

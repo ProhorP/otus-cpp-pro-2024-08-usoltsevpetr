@@ -12,7 +12,7 @@ if(MSVC)
     )
 else()
     target_compile_options(alloc PRIVATE
-        -Wall -Wextra -pedantic #-Werror
+        -Wall -Wextra -pedantic -Werror
     )
 endif()
 
