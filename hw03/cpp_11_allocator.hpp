@@ -65,17 +65,19 @@ struct cpp_11_allocator
             if (p >= (*i).get() && p < (*i).getEnd())
             {
                 (*i).pop();
-                break;
+                if ((*i).getCnt() == 0)
+                    (*poolList).remove(i);
+                return;
             }
         }
     }
 
-    void print(){
+    void print()
+    {
         for (auto &i : *poolList)
         {
             std::cout << "data=" << (*i).get() << ", size=" << (*i).getSize() << ", cnt=" << (*i).getCnt() << std::endl;
         }
-        
     }
 
     template <class U>
