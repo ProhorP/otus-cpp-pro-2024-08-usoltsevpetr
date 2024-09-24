@@ -3,6 +3,12 @@
 #include <map>
 #include <iostream>
 
+int factorial(int i)
+{
+  if (i==0) return 1;
+  else return i*factorial(i-1);
+}
+
 int main()
 {
 
@@ -11,7 +17,7 @@ int main()
     //container1
     std::map<int, int> container1;
     for (int i = 0; i < count; i++)
-        container1[i] = i;
+        container1[i] = factorial(i);
 
     std::cout << "container1:" << std::endl;
     for (auto &i : container1)
@@ -20,7 +26,7 @@ int main()
     //container2
     std::map<int, int, std::less<int>, cpp_11_allocator<std::pair<const int, int>>> container2;
     for (int i = 0; i < count; i++)
-        container2[i] = i;
+        container2[i] = factorial(i);
 
     std::cout << std::endl
               << "container2:" << std::endl;
