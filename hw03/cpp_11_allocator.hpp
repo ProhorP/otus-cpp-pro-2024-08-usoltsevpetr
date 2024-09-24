@@ -58,18 +58,6 @@ struct cpp_11_allocator
         // implementation
     }
 
-    void print_alloc()
-    {
-        std::cout << "alloc.poolList.size()=" << poolList->size() << std::endl;
-        int c = 0;
-        for (auto &i : *poolList)
-        {
-            c++;
-            std::cout << "number=" << c << std::endl;
-            // std::cout << " poollist=" << i <<  std::endl;
-        }
-    }
-
     template <class U>
     struct rebind
     {
