@@ -24,7 +24,7 @@ struct cpp_11_allocator
     cpp_11_allocator()
         : poolList(std::make_shared<std::list<std::shared_ptr<wrapped_mem>>>())
     {
-        poolList->push_back(std::make_shared<wrapped_mem>(10 * sizeof(T)));
+        poolList->push_back(std::make_shared<wrapped_mem>(poolSize * sizeof(T)));
     }
 
     template <class U>
@@ -52,7 +52,6 @@ struct cpp_11_allocator
         int cur = pos;
         pos += n;
         poolList->back()->push();
-        // std::cout << "allocate=" << poolList->back()->get() << std::endl;
         return reinterpret_cast<T *>(poolList->back()->get()) + cur;
     }
 
@@ -69,14 +68,6 @@ struct cpp_11_allocator
                     (*poolList).remove(i);
                 return;
             }
-        }
-    }
-
-    void print()
-    {
-        for (auto &i : *poolList)
-        {
-            std::cout << "data=" << (*i).get() << ", size=" << (*i).getSize() << ", cnt=" << (*i).getCnt() << std::endl;
         }
     }
 

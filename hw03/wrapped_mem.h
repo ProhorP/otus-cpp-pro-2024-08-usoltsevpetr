@@ -9,11 +9,9 @@ public:
     wrapped_mem(std::size_t size) : cnt(0), size(size)
     {
         data = ::operator new(size);
-        // std::cout << "new=" << data << ", size=" << size << std::endl;
     };
     ~wrapped_mem()
     {
-        // std::cout << "delete=" << data << std::endl;
         ::operator delete(data);
     };
     void *get() noexcept

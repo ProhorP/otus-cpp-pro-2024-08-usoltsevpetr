@@ -30,14 +30,6 @@ public:
         ++curSize;
     }
 
-    void print()
-    {
-        std::cout << std::endl
-                  << "InnerContainer:" << std::endl;
-        for (std::size_t i = 0; i < curSize; i++)
-            std::cout << "[" << i << "] = " << data[i] << std::endl;
-    }
-
     std::size_t size() const
     {
         return curSize;
@@ -89,7 +81,6 @@ public:
     }
 
     ~my_vector() {
-        // alloc.print();
     };
 
 private:
