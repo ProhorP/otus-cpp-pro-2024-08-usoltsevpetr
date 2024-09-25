@@ -12,13 +12,13 @@ struct deleter
     }
 };
 
-template <class T>
+template <class T, std::size_t startSize = 10>
 struct cpp_11_allocator
 {
     using value_type = T;
 
     std::shared_ptr<std::list<std::shared_ptr<wrapped_mem>>> poolList;
-    std::size_t poolSize = 10;
+    std::size_t poolSize = startSize;
     std::size_t pos;
 
     cpp_11_allocator()
@@ -44,7 +44,7 @@ struct cpp_11_allocator
     {
         if (pos + n > poolSize)
         {
-            poolSize = pos + n;
+            poolSize = (pos + n) * 2;
             poolList->push_back(std::make_shared<wrapped_mem>(poolSize * sizeof(T)));
             pos = 0;
         }
