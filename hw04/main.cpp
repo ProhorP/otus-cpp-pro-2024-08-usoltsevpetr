@@ -19,8 +19,8 @@ template <typename T,
           std::enable_if_t<std::is_integral_v<T>, bool> = true>
 void print_ip(T param)
 {
-    //P.S. я в курсе про разный порядок байт на разных архитектурах
-    //в качестве простого примера это работает на x86
+    // P.S. я в курсе про разный порядок байт на разных архитектурах
+    // в качестве простого примера это работает на x86
     union
     {
         T valueIntegral;
@@ -28,10 +28,10 @@ void print_ip(T param)
     } u;
     u.valueIntegral = param;
     std::cout << "print_ip_integer:";
-    for (ssize_t i = sizeof(u.valueChar)-1; i >= 0; i--)
+    for (ssize_t i = sizeof(u.valueChar) - 1; i >= 0; i--)
     {
         std::size_t tmp = static_cast<uint8_t>(u.valueChar[i]);
-        if (i == sizeof(u.valueChar)-1)
+        if (i == sizeof(u.valueChar) - 1)
             std::cout << tmp;
         else
             std::cout << '.' << tmp;
@@ -52,10 +52,17 @@ void print_ip(T param)
 {
     std::cout << "print_ip_Container:";
     std::cout << std::endl;
-    for (auto &i : param)
+    auto it = param.begin();
+    for (size_t i = 0; it != param.end(); i++)
     {
-        std::cout << i << std::endl;
+        if (i == 0)
+            std::cout << *it;
+        else
+            std::cout << '.' << *it;
+        ++it;
     }
+
+    std::cout << std::endl;
 }
 
 // requires std::tuple<T>
@@ -78,7 +85,6 @@ void print_ip(T param)
 
 int main()
 {
-    std::string str{"AAA"};
     auto tp = std::make_tuple(123, 456, 789, 0);
     std::array<std::remove_reference_t<decltype(std::get<0>(tp))>, std::tuple_size_v<decltype(tp)>> arr;
     auto tp_1 = std::tuple_cat(arr);
@@ -96,8 +102,17 @@ int main()
 
     std::vector vec{1, 2, 3};
 
-    print_ip( int32_t{2130706433});
-    print_ip(str);
+    print_ip(int32_t{2130706433});
+    print_ip(std::string{“Hello, World !”});
     print_ip(vec);
     print_ip(tp);
+
+    // print_ip(int8_t{-1});                           // 255
+    // print_ip(int16_t{0});                           // 0.0
+    // print_ip(int32_t{2130706433});                  // 127.0.0.1
+    // print_ip(int64_t{8875824491850138409});         // 123.45.67.89.101.112.131.41
+    // print_ip(std::string{“Hello, World !”});        // Hello, World!
+    // print_ip(std::vector<int>{100, 200, 300, 400}); // 100.200.300.400
+    // print_ip(std::list<shot>{400, 300, 200, 100});  // 400.300.200.100
+    // print_ip(std::make_tuple(123, 456, 789, 0));    // 123.456.789.0
 }
