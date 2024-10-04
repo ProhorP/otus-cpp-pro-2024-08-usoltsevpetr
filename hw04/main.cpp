@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <list>
 #include <tuple>
 #include <array>
 #include <type_traits>
@@ -80,7 +81,13 @@ template <typename T,
 void print_ip(T param)
 {
     std::cout << "print_ip_tuple:";
-    std::cout << std::get<0>(param) << std::endl;
+    for (size_t i = 0; i < std::tuple_size<T>{}; i++)
+    {
+        /* code */
+        std::cout << std::get<0>(param);
+    }
+
+    std::cout << std::endl;
 }
 
 int main()
@@ -101,18 +108,21 @@ int main()
     std::cout << std::get<0>(tp_1) << "." << std::get<1>(tp_1) << "." << std::get<2>(tp_1) << "." << std::get<0>(tp_1) << std::endl;
 
     std::vector vec{1, 2, 3};
+    std::list list{1, 2, 3};
 
     print_ip(int32_t{2130706433});
-    print_ip(std::string{“Hello, World !”});
+    std::string str("assddsd");
+    print_ip(str);
     print_ip(vec);
+    print_ip(list);
     print_ip(tp);
 
-    // print_ip(int8_t{-1});                           // 255
-    // print_ip(int16_t{0});                           // 0.0
-    // print_ip(int32_t{2130706433});                  // 127.0.0.1
-    // print_ip(int64_t{8875824491850138409});         // 123.45.67.89.101.112.131.41
-    // print_ip(std::string{“Hello, World !”});        // Hello, World!
-    // print_ip(std::vector<int>{100, 200, 300, 400}); // 100.200.300.400
-    // print_ip(std::list<shot>{400, 300, 200, 100});  // 400.300.200.100
-    // print_ip(std::make_tuple(123, 456, 789, 0));    // 123.456.789.0
+    print_ip(int8_t{-1});                           // 255
+    print_ip(int16_t{0});                           // 0.0
+    print_ip(int32_t{2130706433});                  // 127.0.0.1
+    print_ip(int64_t{8875824491850138409});         // 123.45.67.89.101.112.131.41
+    print_ip(std::string{"Hello, World !"});        // Hello, World!
+    print_ip(std::vector<int>{100, 200, 300, 400}); // 100.200.300.400
+    print_ip(std::list<short>{400, 300, 200, 100}); // 400.300.200.100
+    print_ip(std::make_tuple(123, 456, 789, 0));    // 123.456.789.0
 }
