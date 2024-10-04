@@ -11,7 +11,7 @@ template <typename T,
           std::enable_if_t<std::is_same_v<T, std::string>, bool> = true>
 void print_ip(T string)
 {
-    std::cout << "print_ip_String:";
+    std::cout << "print_ip_String:" << std::endl;
     std::cout << string << std::endl;
 }
 
@@ -28,7 +28,7 @@ void print_ip(T param)
         char valueChar[sizeof(T)];
     } u;
     u.valueIntegral = param;
-    std::cout << "print_ip_integer:";
+    std::cout << "print_ip_integer:" << std::endl;
     for (ssize_t i = sizeof(u.valueChar) - 1; i >= 0; i--)
     {
         std::size_t tmp = static_cast<uint8_t>(u.valueChar[i]);
@@ -51,7 +51,7 @@ template <typename T,
               bool> = true>
 void print_ip(T param)
 {
-    std::cout << "print_ip_Container:";
+    std::cout << "print_ip_Container:" << std::endl;
     std::cout << std::endl;
     auto it = param.begin();
     for (size_t i = 0; it != param.end(); i++)
@@ -66,6 +66,23 @@ void print_ip(T param)
     std::cout << std::endl;
 }
 
+template <std::size_t I = 0, typename... Tp>
+inline typename std::enable_if<I == sizeof...(Tp), void>::type
+print_tuple([[maybe_unused]] std::tuple<Tp...> &t)
+{
+}
+
+template <std::size_t I = 0, typename... Tp>
+    inline typename std::enable_if < I<sizeof...(Tp), void>::type
+                                     print_tuple(std::tuple<Tp...> &t)
+{
+    if (I < sizeof...(Tp) - 1)
+        std::cout << std::get<I>(t) << '.';
+    else
+        std::cout << std::get<I>(t);
+    print_tuple<I + 1, Tp...>(t);
+}
+
 // requires std::tuple<T>
 // получаем тип первого элемента и количество элементов в tuple(T)
 // создаем массив на основании этого
@@ -78,14 +95,10 @@ template <typename T,
                                                          std::remove_reference_t<decltype(std::get<0>(std::declval<T>()))>,
                                                          std::tuple_size_v<std::remove_reference_t<decltype(std::declval<T>())>>>>()))>,
               bool> = true>
-void print_ip(T param)
+void print_ip(T tp)
 {
-    std::cout << "print_ip_tuple:";
-    for (size_t i = 0; i < std::tuple_size<T>{}; i++)
-    {
-        /* code */
-        std::cout << std::get<0>(param);
-    }
+    std::cout << "print_ip_tuple:" << std::endl;
+    print_tuple(tp);
 
     std::cout << std::endl;
 }
