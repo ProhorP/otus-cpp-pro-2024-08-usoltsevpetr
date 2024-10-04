@@ -6,7 +6,10 @@
 #include <array>
 #include <type_traits>
 
-// requires std::string<T>
+/**
+ * @brief
+ * SFINAE для печати std::string
+ */
 template <typename T,
           std::enable_if_t<std::is_same_v<T, std::string>, bool> = true>
 void print_ip(T string)
@@ -15,7 +18,11 @@ void print_ip(T string)
     std::cout << string << std::endl;
 }
 
-// requires std::integral<T>
+/**
+ * @brief
+ *  SFINAE для печати целых чисел
+ * 
+ */
 template <typename T,
           std::enable_if_t<std::is_integral_v<T>, bool> = true>
 void print_ip(T param)
@@ -40,15 +47,21 @@ void print_ip(T param)
     std::cout << std::endl;
 }
 
-// requires std::container<T>
-// Если у объекта есть метод emplace_back - значит это контейнер
-// std::string не имеет этого метода
+
+/**
+ * @brief
+ * SFINAE для печати контейнеров
+ * Если у объекта есть метод emplace_back - значит это контейнер
+ * std::string не имеет этого метода
+ * 
+ */
 template <typename T,
           std::enable_if_t<
               std::is_same_v<
                   decltype(std::declval<T>().emplace_back()),
                   decltype(std::declval<T>().emplace_back())>,
               bool> = true>
+         
 void print_ip(T param)
 {
     // std::cout << "print_ip_Container:" << std::endl;
@@ -65,12 +78,19 @@ void print_ip(T param)
     std::cout << std::endl;
 }
 
+/**
+ * @brief
+ * спецификация для конца печати std::tuple
+ */
 template <std::size_t I = 0, typename... Tp>
 typename std::enable_if_t<I == sizeof...(Tp), void>
 print_tuple([[maybe_unused]] std::tuple<Tp...> &t)
 {
 }
 
+/**
+ * @brief Печатает std::tuple с разделителем '.'
+ */
 template <std::size_t I = 0, typename... Tp>
     typename std::enable_if_t < I<sizeof...(Tp), void>
                                 print_tuple(std::tuple<Tp...> &t)
@@ -82,10 +102,14 @@ template <std::size_t I = 0, typename... Tp>
     print_tuple<I + 1, Tp...>(t);
 }
 
-// requires std::tuple<T>
-// получаем тип первого элемента и количество элементов в tuple(T)
-// создаем массив на основании этого
-// далее массив преобразуем в tuple через tuple_cat и сравниваем с типом T
+
+/**
+ * @brief 
+ * SFINAE для печати std::tuple с одинаковыми типами
+ * получаем тип первого элемента и количество элементов в tuple(T)
+ * создаем массив на основании этого
+ * далее массив преобразуем в tuple через tuple_cat и сравниваем с типом T
+ */
 template <typename T,
           std::enable_if_t<
               std::is_same_v<T,
