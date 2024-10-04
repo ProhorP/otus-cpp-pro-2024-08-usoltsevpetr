@@ -67,14 +67,14 @@ void print_ip(T param)
 }
 
 template <std::size_t I = 0, typename... Tp>
-inline typename std::enable_if_t<I == sizeof...(Tp), void>
+typename std::enable_if_t<I == sizeof...(Tp), void>
 print_tuple([[maybe_unused]] std::tuple<Tp...> &t)
 {
 }
 
 template <std::size_t I = 0, typename... Tp>
-    inline typename std::enable_if_t < I<sizeof...(Tp), void>
-                                       print_tuple(std::tuple<Tp...> &t)
+    typename std::enable_if_t < I<sizeof...(Tp), void>
+                                print_tuple(std::tuple<Tp...> &t)
 {
     if (I < sizeof...(Tp) - 1)
         std::cout << std::get<I>(t) << '.';
