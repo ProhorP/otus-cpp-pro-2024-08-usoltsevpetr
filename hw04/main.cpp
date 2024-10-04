@@ -11,7 +11,7 @@ template <typename T,
           std::enable_if_t<std::is_same_v<T, std::string>, bool> = true>
 void print_ip(T string)
 {
-    std::cout << "print_ip_String:" << std::endl;
+    // std::cout << "print_ip_String:" << std::endl;
     std::cout << string << std::endl;
 }
 
@@ -28,7 +28,7 @@ void print_ip(T param)
         char valueChar[sizeof(T)];
     } u;
     u.valueIntegral = param;
-    std::cout << "print_ip_integer:" << std::endl;
+    // std::cout << "print_ip_integer:" << std::endl;
     for (ssize_t i = sizeof(u.valueChar) - 1; i >= 0; i--)
     {
         std::size_t tmp = static_cast<uint8_t>(u.valueChar[i]);
@@ -51,8 +51,7 @@ template <typename T,
               bool> = true>
 void print_ip(T param)
 {
-    std::cout << "print_ip_Container:" << std::endl;
-    std::cout << std::endl;
+    // std::cout << "print_ip_Container:" << std::endl;
     auto it = param.begin();
     for (size_t i = 0; it != param.end(); i++)
     {
@@ -97,7 +96,7 @@ template <typename T,
               bool> = true>
 void print_ip(T tp)
 {
-    std::cout << "print_ip_tuple:" << std::endl;
+    // std::cout << "print_ip_tuple:" << std::endl;
     print_tuple(tp);
 
     std::cout << std::endl;
@@ -105,30 +104,30 @@ void print_ip(T tp)
 
 int main()
 {
-    auto tp = std::make_tuple(123, 456, 789, 0);
-    std::array<std::remove_reference_t<decltype(std::get<0>(tp))>, std::tuple_size_v<decltype(tp)>> arr;
-    auto tp_1 = std::tuple_cat(arr);
-    // Проверка типов
-    if constexpr (std::is_same_v<decltype(tp), decltype(tp_1)>)
-    {
-        std::cout << "Типы одинаковы\n";
-    }
-    else
-    {
-        std::cout << "Типы различны\n";
-    }
+    // auto tp = std::make_tuple(123, 456, 789, 0);
+    // std::array<std::remove_reference_t<decltype(std::get<0>(tp))>, std::tuple_size_v<decltype(tp)>> arr;
+    // auto tp_1 = std::tuple_cat(arr);
+    // // Проверка типов
+    // if constexpr (std::is_same_v<decltype(tp), decltype(tp_1)>)
+    // {
+    //     std::cout << "Типы одинаковы\n";
+    // }
+    // else
+    // {
+    //     std::cout << "Типы различны\n";
+    // }
 
-    std::cout << std::get<0>(tp_1) << "." << std::get<1>(tp_1) << "." << std::get<2>(tp_1) << "." << std::get<0>(tp_1) << std::endl;
+    // std::cout << std::get<0>(tp_1) << "." << std::get<1>(tp_1) << "." << std::get<2>(tp_1) << "." << std::get<0>(tp_1) << std::endl;
 
-    std::vector vec{1, 2, 3};
-    std::list list{1, 2, 3};
+    // std::vector vec{1, 2, 3};
+    // std::list list{1, 2, 3};
 
-    print_ip(int32_t{2130706433});
-    std::string str("assddsd");
-    print_ip(str);
-    print_ip(vec);
-    print_ip(list);
-    print_ip(tp);
+    // print_ip(int32_t{2130706433});
+    // std::string str("assddsd");
+    // print_ip(str);
+    // print_ip(vec);
+    // print_ip(list);
+    // print_ip(tp);
 
     print_ip(int8_t{-1});                           // 255
     print_ip(int16_t{0});                           // 0.0
