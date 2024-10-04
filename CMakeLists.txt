@@ -12,6 +12,7 @@ add_subdirectory(googletest-1.15.2)
 # add_subdirectory(hw01)
 # add_subdirectory(hw02)
 # add_subdirectory(hw03)
+# add_subdirectory(hw03)
 add_subdirectory(hw04)
 
 set(CPACK_GENERATOR DEB)
