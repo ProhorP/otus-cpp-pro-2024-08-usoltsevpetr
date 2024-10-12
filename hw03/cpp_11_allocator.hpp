@@ -85,11 +85,11 @@ struct cpp_11_allocator
 template <class T, class U>
 constexpr bool operator==(const cpp_11_allocator<T> &a1, const cpp_11_allocator<U> &a2) noexcept
 {
-    return a1.pool == a2.pool;
+    return a1.poolList == a2.poolList;
 }
 
 template <class T, class U>
 constexpr bool operator!=(const cpp_11_allocator<T> &a1, const cpp_11_allocator<U> &a2) noexcept
 {
-    return a1.pool != a2.pool;
+    return a1.poolList != a2.poolList;
 }
