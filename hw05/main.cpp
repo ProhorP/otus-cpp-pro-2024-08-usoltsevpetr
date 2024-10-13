@@ -1,3 +1,4 @@
+#include <type_traits>
 class File
 {
 private:
@@ -6,13 +7,33 @@ public:
     ~File() = default;
 };
 
+class File2
+{
+private:
+public:
+    File2() = default;
+    ~File2() = default;
+};
+
 class Document
 {
 private:
 public:
     Document() = default;
     Document([[maybe_unused]] File file) {};
-    File exportFile() { return {}; };
+    Document([[maybe_unused]] File2 file) {};
+    template <typename T,
+              std::enable_if_t<std::is_same_v<T, File>, bool> = true>
+    T exportFile()
+    {
+        return {};
+    }
+    template <typename T,
+              std::enable_if_t<std::is_same_v<T, File2>, bool> = true>
+    T exportFile()
+    {
+        return {};
+    }
     ~Document() = default;
 };
 
@@ -31,7 +52,7 @@ public:
     void importFile(T param) { doc = Document(param); }
 
     template <typename T>
-    T exportFile() { return doc.exportFile(); }
+    T exportFile() { return doc.exportFile<T>(); }
 
     ~View() = default;
 };
