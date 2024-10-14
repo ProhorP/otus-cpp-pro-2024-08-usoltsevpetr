@@ -5,6 +5,7 @@
 #include <tuple>
 #include <array>
 #include <type_traits>
+#include <charconv>
 
 /**
  * @brief
@@ -12,7 +13,7 @@
  */
 template <typename T,
           std::enable_if_t<std::is_same_v<T, std::string>, bool> = true>
-void print_ip(T string)
+void print_ip(const T &string)
 {
     // std::cout << "print_ip_String:" << std::endl;
     std::cout << string << std::endl;
@@ -21,25 +22,18 @@ void print_ip(T string)
 /**
  * @brief
  *  SFINAE для печати целых чисел
- * 
+ *
  */
 template <typename T,
           std::enable_if_t<std::is_integral_v<T>, bool> = true>
 void print_ip(T param)
 {
-    // P.S. я в курсе про разный порядок байт на разных архитектурах
-    // в качестве простого примера это работает на x86
-    union
+    unsigned char *bytePtr = reinterpret_cast<unsigned char *>(&param);
+
+    for (ssize_t i = sizeof(T) - 1; i >= 0; i--)
     {
-        T valueIntegral;
-        char valueChar[sizeof(T)];
-    } u;
-    u.valueIntegral = param;
-    // std::cout << "print_ip_integer:" << std::endl;
-    for (ssize_t i = sizeof(u.valueChar) - 1; i >= 0; i--)
-    {
-        std::size_t tmp = static_cast<uint8_t>(u.valueChar[i]);
-        if (i == sizeof(u.valueChar) - 1)
+        int tmp = static_cast<int>(bytePtr[i]);
+        if (i == sizeof(T) - 1)
             std::cout << tmp;
         else
             std::cout << '.' << tmp;
@@ -47,13 +41,12 @@ void print_ip(T param)
     std::cout << std::endl;
 }
 
-
 /**
  * @brief
  * SFINAE для печати контейнеров
  * Если у объекта есть метод emplace_back - значит это контейнер
  * std::string не имеет этого метода
- * 
+ *
  */
 template <typename T,
           std::enable_if_t<
@@ -61,7 +54,7 @@ template <typename T,
                   decltype(std::declval<T>().emplace_back()),
                   decltype(std::declval<T>().emplace_back())>,
               bool> = true>
-         
+
 void print_ip(T param)
 {
     // std::cout << "print_ip_Container:" << std::endl;
@@ -102,9 +95,8 @@ template <std::size_t I = 0, typename... Tp>
     print_tuple<I + 1, Tp...>(t);
 }
 
-
 /**
- * @brief 
+ * @brief
  * SFINAE для печати std::tuple с одинаковыми типами
  * получаем тип первого элемента и количество элементов в tuple(T)
  * создаем массив на основании этого
